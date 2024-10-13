@@ -33,20 +33,6 @@ const App = () => {
 
   const eventEmitter = new NativeEventEmitter(ScreenshotModule);
 
-  // useEffect(() => {
-  //   if (isActivated) {
-  //     // Listen for screenshot events and alert user
-  //     const screenshotListener = () => {
-  //       Alert.alert('Screenshot Taken', 'You took a screenshot');
-  //     };
-
-  //     // Placeholder for setting up screenshot detection.
-  //     // Set up your listener based on platform.
-  //   }
-  // }, [isActivated]);
-
-
-  
 
   useEffect(() => {
     
@@ -58,7 +44,7 @@ const App = () => {
     const subscription = eventEmitter.addListener('onScreenshotTaken', () => {
 
 
-      // Alert.alert('Screenshot detected!', 'A screenshot was taken.');
+      Alert.alert('Screenshot detected!', 'A screenshot was taken.');
 
       // Call the API when a screenshot is taken
     });
@@ -137,8 +123,6 @@ const App = () => {
   if (hasPermission) {
       try {
         const response =  await ScreenshotModule.toggleScreenshot(isActivated);
-        console.log('response ----->>>>', response);
-        
         setIsActivated(!isActivated);
         if (response === Constants.SCREENSHOT_ENABLED) {
             setScreenshotFeatureDetails(response)
@@ -174,7 +158,6 @@ const App = () => {
       }
     });
 
-    console.log('deviceDetails -->>>', deviceDetails);
   };
 
   const getLocation = (): Promise<{ lat: number; lon: number }> => {

@@ -31,6 +31,8 @@ const App = () => {
   const [screenshotFeatureDetails, setScreenshotFeatureDetails] = useState<string>('');
   const [isScreenshotTaken, setIsScreenshotTaken] = useState<boolean>(false);
 
+  const eventEmitter = new NativeEventEmitter(ScreenshotModule);
+
   // useEffect(() => {
   //   if (isActivated) {
   //     // Listen for screenshot events and alert user
@@ -48,13 +50,15 @@ const App = () => {
 
   useEffect(() => {
     
-    const eventEmitter = new NativeEventEmitter(ScreenshotModule);
-    // console.log('NativeEventEmitter ---->>>', eventEmitter);
+    // const eventEmitter = new NativeEventEmitter(ScreenshotModule);
+    console.log('NativeEventEmitter ---->>>', eventEmitter);
 
 
     // Listen for the screenshot event
     const subscription = eventEmitter.addListener('onScreenshotTaken', () => {
-      Alert.alert('Screenshot detected!', 'A screenshot was taken.');
+
+
+      // Alert.alert('Screenshot detected!', 'A screenshot was taken.');
 
       // Call the API when a screenshot is taken
     });
@@ -63,7 +67,7 @@ const App = () => {
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [eventEmitter.listenerCount]);
 
   useEffect(() => {
     getPublicIpAddressApiCall();

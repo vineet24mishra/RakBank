@@ -18,8 +18,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Handler;
 
-import java.util.Objects;
-
 public class ScreenshotModule extends ReactContextBaseJavaModule {
     private final ReactApplicationContext reactContext;
     private ContentObserver contentObserver;
@@ -50,12 +48,10 @@ public class ScreenshotModule extends ReactContextBaseJavaModule {
             @Override
             public void run() {
                 if (isEnabled) {
-                    System.out.println("isEnabled ====>>>");
                     startListening();
                     currentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE); // Enable screenshot
                     promise.resolve("Screenshot Enabled");
                 } else {
-                    System.out.println("isEnabled NOT ====>>>");
                     stopListening();
                     currentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE); // Disable screenshot
                     promise.resolve("Screenshot Disabled");
@@ -72,14 +68,7 @@ public class ScreenshotModule extends ReactContextBaseJavaModule {
                     super.onChange(selfChange);
                     detectScreenshot();
                 }
-
-                @Override
-                public void onChange(boolean selfChange, Uri uri) {
-                    super.onChange(selfChange, uri);
-                    detectScreenshot();
-                }
             };
-
             ContentResolver resolver = reactContext.getContentResolver();
             resolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, contentObserver);
         }

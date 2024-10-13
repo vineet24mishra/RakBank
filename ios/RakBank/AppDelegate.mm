@@ -1,6 +1,6 @@
 #import "AppDelegate.h"
-
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTEventEmitter.h> // Import RCTEventEmitter for sending events to JS
 
 @implementation AppDelegate
 
@@ -10,6 +10,12 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
+
+  // Add observer for screenshot detection
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(userDidTakeScreenshot:)
+                                               name:UIApplicationUserDidTakeScreenshotNotification
+                                             object:nil];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
@@ -26,6 +32,17 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+// Screenshot detection method
+- (void)userDidTakeScreenshot:(NSNotification *)notification {
+  // Send an event to React Native when a screenshot is detected
+  [self sendEventWithName:@"onScreenshotTaken" body:@{}];
+}
+
+// Required for emitting events to React Native
+- (NSArray<NSString *> *)supportedEvents {
+  return @[@"onScreenshotTaken"];
 }
 
 @end
